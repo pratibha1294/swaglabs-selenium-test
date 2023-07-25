@@ -12,7 +12,8 @@ import java.util.logging.Logger;
 public class Flow {
     Logger log;
     ChromeDriver driver;
-@BeforeSuite
+
+    @BeforeSuite
     private void setUp() {
         log = Logger.getAnonymousLogger();
         // declaration and instantiation of objects/variables
@@ -20,7 +21,7 @@ public class Flow {
         driver = new ChromeDriver();
     }
 
-    private void login(String userName, String password){
+    private void login(String userName, String password) {
         WebDriver.Navigation ngv = driver.navigate();
         ngv.to("http://saucedemo.com/");
         log.info("Please check navigation");
@@ -33,16 +34,7 @@ public class Flow {
         log.info("Please check login");
     }
 
-    @Test
-    public void test_StandardUser() throws InterruptedException {
-
-
-// Launch website
-
-        login("standard_user","secret_sauce");
-        Thread.sleep(5000);
-        log.info("Please check waiting");
-
+    private void logout() throws InterruptedException {
         WebElement hamburgerButton = driver.findElement(By.id("react-burger-menu-btn"));
         hamburgerButton.click();
         log.info("Please check menu");
@@ -52,6 +44,20 @@ public class Flow {
         logoutButton.click();
         log.info("Please check logout");
         Thread.sleep(5000);
+
+    }
+
+    @Test
+    public void test_StandardUser() throws InterruptedException {
+
+
+// Launch website
+
+        login("standard_user", "secret_sauce");
+        Thread.sleep(5000);
+        log.info("Please check waiting");
+        logout();
+
 
         driver.quit();
     }
@@ -61,21 +67,13 @@ public class Flow {
 
 
 // Launch website
-        login("locked_out_user","secret_sauce");
+        login("locked_out_user", "secret_sauce");
 
 
         Thread.sleep(5000);
         log.info("Please check waiting");
 
-        WebElement hamburgerButton = driver.findElement(By.id("react-burger-menu-btn"));
-        hamburgerButton.click();
-        log.info("Please check menu");
-        Thread.sleep(9000);
-
-        WebElement logoutButton = driver.findElement(By.id("logout_sidebar_link"));
-        logoutButton.click();
-        log.info("Please check logout");
-        Thread.sleep(5000);
+       logout();
 
         driver.quit();
     }
