@@ -20,22 +20,26 @@ public class Flow {
         driver = new ChromeDriver();
     }
 
+    private void login(String userName, String password){
+        WebDriver.Navigation ngv = driver.navigate();
+        ngv.to("http://saucedemo.com/");
+        log.info("Please check navigation");
+//         ngv.wait(8000);
+        WebElement usernameEL = driver.findElement(By.id("user-name"));
+        WebElement passwordEL = driver.findElement(By.id("password"));
+        usernameEL.sendKeys(userName);
+        passwordEL.sendKeys(password);
+        driver.findElement(By.name("login-button")).click();
+        log.info("Please check login");
+    }
+
     @Test
     public void test_StandardUser() throws InterruptedException {
 
 
 // Launch website
-        WebDriver.Navigation ngv = driver.navigate();
-        ngv.to("http://saucedemo.com/");
-        log.info("Please check navigation");
-//         ngv.wait(8000);
-        WebElement username = driver.findElement(By.id("user-name"));
-        WebElement password = driver.findElement(By.id("password"));
-        username.sendKeys("standard_user");
-        password.sendKeys("secret_sauce");
-        driver.findElement(By.name("login-button")).click();
-        log.info("Please check login");
 
+        login("standard_user","secret_sauce");
         Thread.sleep(5000);
         log.info("Please check waiting");
 
@@ -57,16 +61,8 @@ public class Flow {
 
 
 // Launch website
-        WebDriver.Navigation ngv = driver.navigate();
-        ngv.to("http://saucedemo.com/");
-        log.info("Please check navigation");
-//         ngv.wait(8000);
-        WebElement username = driver.findElement(By.id("user-name"));
-        WebElement password = driver.findElement(By.id("password"));
-        username.sendKeys("locked_out_user");
-        password.sendKeys("secret_sauce");
-        driver.findElement(By.name("login-button")).click();
-        log.info("Please check login");
+        login("locked_out_user","secret_sauce");
+
 
         Thread.sleep(5000);
         log.info("Please check waiting");
