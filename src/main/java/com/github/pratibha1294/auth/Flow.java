@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -49,31 +50,29 @@ public class Flow {
 
     @Test
     public void test_StandardUser() throws InterruptedException {
-
-
-// Launch website
-
         login("standard_user", "secret_sauce");
         Thread.sleep(5000);
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl,"https://www.saucedemo.com/inventory.html");
         log.info("Please check waiting");
         logout();
-
-
         driver.quit();
     }
 
     @Test
     public void test_LockedOutUser() throws InterruptedException {
 
-
-// Launch website
         login("locked_out_user", "secret_sauce");
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl,"https://www.saucedemo.com/");
+        WebElement errorMessageEl= driver.findElement(By.xpath("//*[@id='login_button_container']/div/form/div[3]/h3"));
 
+        String errMsg = errorMessageEl.getText();
+
+        Assert.assertEquals(errMsg,"Epic sadface: Sorry, this user has been locked out.");
 
         Thread.sleep(5000);
         log.info("Please check waiting");
-
-       logout();
 
         driver.quit();
     }
