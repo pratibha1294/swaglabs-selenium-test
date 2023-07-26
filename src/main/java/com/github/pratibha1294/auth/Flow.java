@@ -9,6 +9,7 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 public class Flow {
@@ -24,7 +25,7 @@ public class Flow {
     }
 
     @AfterSuite
-    private void teardown(){
+    private void teardown() {
         driver.quit();
     }
 
@@ -45,7 +46,7 @@ public class Flow {
         WebElement hamburgerButton = driver.findElement(By.id("react-burger-menu-btn"));
         hamburgerButton.click();
         log.info("Please check menu");
-        Thread.sleep(9000);
+        Thread.sleep(2000);
 
         WebElement logoutButton = driver.findElement(By.id("logout_sidebar_link"));
         logoutButton.click();
@@ -59,7 +60,7 @@ public class Flow {
         login("standard_user", "secret_sauce");
         Thread.sleep(5000);
         String currentUrl = driver.getCurrentUrl();
-        Assert.assertEquals(currentUrl,"https://www.saucedemo.com/inventory.html");
+        Assert.assertEquals(currentUrl, "https://www.saucedemo.com/inventory.html");
         log.info("Please check waiting");
         logout();
 
@@ -70,12 +71,12 @@ public class Flow {
 
         login("locked_out_user", "secret_sauce");
         String currentUrl = driver.getCurrentUrl();
-        Assert.assertEquals(currentUrl,"https://www.saucedemo.com/");
-        WebElement errorMessageEl= driver.findElement(By.xpath("//*[@id='login_button_container']/div/form/div[3]/h3"));
+        Assert.assertEquals(currentUrl, "https://www.saucedemo.com/");
+        WebElement errorMessageEl = driver.findElement(By.xpath("//*[@id='login_button_container']/div/form/div[3]/h3"));
 
         String errMsg = errorMessageEl.getText();
 
-        Assert.assertEquals(errMsg,"Epic sadface: Sorry, this user has been locked out.");
+        Assert.assertEquals(errMsg, "Epic sadface: Sorry, this user has been locked out.");
 
         Thread.sleep(5000);
         log.info("Please check waiting");
@@ -83,8 +84,24 @@ public class Flow {
 
     }
 
+    @Test
+    public void test_ProblemUser() throws InterruptedException {
+//*[@id="item_4_img_link"]/img
+        login("problem_user", "secret_sauce");
+        Thread.sleep(5000);
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl, "https://www.saucedemo.com/inventory.html");
+        List<WebElement> inventoryItems = driver.findElements(By.className("inventory_item"));
+        Assert.assertEquals(inventoryItems.size(), 6);
+        inventoryItems.forEach(item -> {
+            WebElement image = item.findElement(By.tagName("img"));
+            String actualSourceUrl = image.getAttribute("src");
+            String expectedSourceUrl = "https://www.saucedemo.com/static/media/sl-404.168b1cce.jpg";
+            Assert.assertEquals(actualSourceUrl, expectedSourceUrl);
+            Assert.assertTrue(actualSourceUrl.contains("https://www.saucedemo.com/static/media/sl-404"));
 
-    public void test_ProblemUser() {
-
+        });
+        log.info("Please check waiting");
+        logout();
     }
 }
