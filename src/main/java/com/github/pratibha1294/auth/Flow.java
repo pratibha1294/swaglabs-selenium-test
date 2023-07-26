@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -20,6 +21,11 @@ public class Flow {
         // declaration and instantiation of objects/variables
         System.setProperty("webdriver.chrome.driver", "/home/prathiba/chromedriver_linux64 (1)/chromedriver");
         driver = new ChromeDriver();
+    }
+
+    @AfterSuite
+    private void teardown(){
+        driver.quit();
     }
 
     private void login(String userName, String password) {
@@ -56,7 +62,7 @@ public class Flow {
         Assert.assertEquals(currentUrl,"https://www.saucedemo.com/inventory.html");
         log.info("Please check waiting");
         logout();
-        driver.quit();
+
     }
 
     @Test
@@ -74,7 +80,7 @@ public class Flow {
         Thread.sleep(5000);
         log.info("Please check waiting");
 
-        driver.quit();
+
     }
 
 
