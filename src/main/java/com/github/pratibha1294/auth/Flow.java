@@ -55,7 +55,7 @@ public class Flow {
 
     }
 
-    @Test
+    @Test(priority =1)
     public void test_StandardUser() throws InterruptedException {
         login("standard_user", "secret_sauce");
         Thread.sleep(5000);
@@ -66,7 +66,7 @@ public class Flow {
 
     }
 
-    @Test
+    @Test(priority = 2)
     public void test_LockedOutUser() throws InterruptedException {
 
         login("locked_out_user", "secret_sauce");
@@ -84,9 +84,9 @@ public class Flow {
 
     }
 
-    @Test
+    @Test(priority = 3)
     public void test_ProblemUser() throws InterruptedException {
-//*[@id="item_4_img_link"]/img
+
         login("problem_user", "secret_sauce");
         Thread.sleep(5000);
         String currentUrl = driver.getCurrentUrl();
